@@ -1,0 +1,69 @@
+JANE SMITH
+Full Stack Developer
+
+CONTACT INFORMATION
+Email: jane.smith@example.com
+Phone: +1 (555) 987-6543
+Location: Austin, TX / Remote
+GitHub: github.com/janesmith
+
+PROFESSIONAL SUMMARY
+Full Stack Developer with 6 years of experience building modern web and mobile applications.
+Proficient in JavaScript, React, Node.js, and Python. Strong focus on user experience, 
+clean code, and agile development practices.
+
+PROFESSIONAL EXPERIENCE
+
+WebInnovate Inc - Senior Full Stack Developer (2021 - Present)
+- Built and maintained React-based SPA serving 500K+ users
+- Developed Node.js APIs with Express, handling 50K requests/day
+- Implemented CI/CD pipelines using GitHub Actions reducing deployment time by 70%
+- Mentored 2 junior developers on best practices
+- Technologies: JavaScript, React, Node.js, PostgreSQL, Docker, AWS
+
+DigitalSolutions - Full Stack Developer (2019 - 2021)
+- Developed full-stack e-commerce platform using React and Django
+- Implemented payment integration with Stripe and PayPal
+- Optimized frontend performance achieving 90+ Lighthouse score
+- Technologies: JavaScript, React, Python, Django, MySQL, Heroku
+
+TechHub - Junior Developer (2017 - 2019)
+- Built responsive web pages using HTML5, CSS3, and JavaScript
+- Contributed to React component library used across projects
+- Fixed bugs and implemented feature requests
+- Technologies: JavaScript, HTML5, CSS3, React, MongoDB
+
+TECHNICAL SKILLS
+
+Languages: JavaScript, TypeScript, Python, SQL, HTML5, CSS3
+Frontend: React, Vue.js, Redux, CSS-in-JS, Tailwind CSS
+Backend: Node.js, Express, Django, Flask, FastAPI
+Databases: PostgreSQL, MySQL, MongoDB, Firebase
+Cloud & DevOps: AWS, Docker, Git, GitHub Actions, Heroku
+Tools: VS Code, webpack, Jest, Postman, Figma
+
+EDUCATION
+
+Bachelor of Science in Information Technology
+University of Texas at Austin (2017)
+
+CERTIFICATIONS
+- AWS Certified Cloud Practitioner (2022)
+
+PROJECTS
+
+Online Job Portal (2020-2021)
+- Built full-stack job search platform with 10K+ users
+- Implemented advanced filtering and notification system
+- Tech: React, Node.js, PostgreSQL
+
+E-Learning Platform (2019-2020)
+- Developed interactive course platform with video streaming
+- Implemented real-time chat using WebSockets
+- Tech: React, Node.js, MongoDB
+
+ADDITIONAL INFORMATION
+- Open source contributor (contributed to 5+ projects)
+- Remote work experience: 2 years
+- Agile/Scrum certified
+- Available for flexible work arrangements

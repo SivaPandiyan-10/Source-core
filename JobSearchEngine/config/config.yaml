@@ -1,0 +1,55 @@
+# JobSearchEngine Configuration
+
+# Job search settings
+job_search:
+  enabled: true
+  interval_hours: 6
+  min_confidence_threshold: 0.65
+  skill_weight: 0.35
+  experience_weight: 0.30
+  role_weight: 0.25
+  location_weight: 0.10
+  experience_tolerance_years: 1
+
+# Job portal configurations
+job_portals:
+  linkedin:
+    enabled: true
+    search_keywords_from_resume: true
+    rate_limit_requests_per_hour: 30
+    request_timeout_seconds: 30
+  
+  naukri:
+    enabled: true
+    search_keywords_from_resume: true
+    rate_limit_requests_per_hour: 20
+    request_timeout_seconds: 30
+    base_url: "https://www.naukri.com"
+
+# Job filtering settings
+filters:
+  experience_tolerance_years: 1
+  preferred_locations:
+    - "San Francisco"
+    - "Bay Area"
+    - "Remote"
+    - "Bangalore"
+  excluded_companies: []
+  excluded_keywords:
+    - "Intern"
+    - "Trainee"
+    - "Part-time"
+
+# Path configurations
+paths:
+  resumes: "./resumes"
+  logs: "./logs"
+  cache: "./cache"
+  cpp_engine_path: "./bin/jobsearch_engine"
+
+# System-level configurations
+system:
+  prevent_sleep_on_windows: true
+  log_level: "INFO"
+  max_retries: 3
+  retry_backoff_seconds: 30
