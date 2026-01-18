@@ -1,49 +1,63 @@
-cmake_minimum_required(VERSION 3.15)
-project(JobSearchEngine VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.10)
+project(JobSearchEngine)
 
-# C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
-
-# Output directories
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-# Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-# Source files for main executable
-set(SOURCES
-    cpp/src/main.cpp
-    cpp/src/resume_parser.cpp
-    cpp/src/matcher.cpp
-    cpp/src/ipc_handler.cpp
-)
-
-# Create main executable
-add_executable(jobsearch_engine ${SOURCES})
-
-# Optional: Add support for C++17 features
-target_compile_features(jobsearch_engine PRIVATE cxx_std_17)
-
-# Optional: Link against nlohmann/json if available
-# find_package(nlohmann_json 3.2.0 QUIET)
-# if(nlohmann_json_FOUND)
-#     target_link_libraries(jobsearch_engine PRIVATE nlohmann_json::nlohmann_json)
-# endif()
 
 # Enable testing
 enable_testing()
 
-# Test executable (optional)
-# add_executable(test_runner
-#     cpp/tests/test_parser.cpp
-#     cpp/src/resume_parser.cpp
-#     cpp/src/matcher.cpp
-#     cpp/src/ipc_handler.cpp
-# )
-# add_test(NAME Tests COMMAND test_runner)
+# Add include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/cpp/include)
+
+# Source files for the C++ server
+set(SERVER_SOURCES
+    cpp/src/main.cpp
+    cpp/src/message_protocol.cpp
+    cpp/src/tcp_server.cpp
+    cpp/src/matcher.cpp
+    cpp/src/resume_parser.cpp
+)
+
+# Create executable
+add_executable(job_matching_engine ${SERVER_SOURCES})
+
+# Platform-specific libraries
+if(WIN32)
+    target_link_libraries(job_matching_engine ws2_32)
+elseif(UNIX)
+    target_link_libraries(job_matching_engine pthread)
+endif()
+
+# Required: nlohmann/json header-only library
+# Download from: https://github.com/nlohmann/json/releases
+# Place in cpp/include/nlohmann/
+
+# Check if nlohmann/json is available
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cpp/include/nlohmann/json.hpp")
+    message(WARNING "nlohmann/json not found. Please download and place it in cpp/include/nlohmann/")
+endif()
+
+# Compiler flags for better warnings and optimization
+if(MSVC)
+    target_compile_options(job_matching_engine PRIVATE /W4 /O2)
+else()
+    target_compile_options(job_matching_engine PRIVATE -Wall -Wextra -O2)
+endif()
 
 # Installation
-install(TARGETS jobsearch_engine DESTINATION bin)
+install(TARGETS job_matching_engine DESTINATION bin)
+
+# Print summary
+message(STATUS "====================================")
+message(STATUS "JobSearchEngine - C++ Server Build")
+message(STATUS "====================================")
+message(STATUS "Target: job_matching_engine")
+message(STATUS "C++ Standard: C++17")
+message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+if(WIN32)
+    message(STATUS "Platform: Windows")
+elseif(UNIX)
+    message(STATUS "Platform: Unix/Linux")
+endif()
+message(STATUS "====================================")

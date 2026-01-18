@@ -1,284 +1,142 @@
-# JobSearchEngine Build Instructions
+# JobSearchEngine - Build & Deployment Guide
 
 ## Prerequisites
 
-### Windows
-- Visual Studio 2019 or later (with C++ tools)
-- CMake 3.15+
-- Go 1.21+
-- Git
-- PowerShell or Command Prompt
+### C++ Server
+- **CMake** 3.10 or higher
+- **C++17 compatible compiler:** MSVC 2017+, GCC 7+, or Clang 5+
+- **nlohmann/json** (header-only library)
 
-### Linux
-- GCC 9+ or Clang 10+
-- CMake 3.15+
-- Go 1.21+
-- Git
-- Bash
+### Go Orchestrator
+- **Go** 1.21 or higher
 
-## Building C++ Component
+---
 
-### Windows (Visual Studio)
+## Building C++ Server
 
-```powershell
-cd JobSearchEngine
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
-```
-
-Output: `bin/jobsearch_engine.exe`
-
-### Linux / macOS
+### Windows (MSVC)
 
 ```bash
 cd JobSearchEngine
 mkdir build
 cd build
-cmake ..
-make
-```
-
-Output: `bin/jobsearch_engine`
-
-## Building Go Component
-
-### Windows & Linux
-
-```bash
-cd JobSearchEngine/go
-go mod download
-go build -o ../bin/jobsearch_app ./cmd/jobsearch
-```
-
-Output: `bin/jobsearch_app` (or `.exe` on Windows)
-
-## Complete Build Script
-
-### build.ps1 (Windows PowerShell)
-
-```powershell
-# Create build directory
-if (!(Test-Path "build")) { mkdir build }
-cd build
-
-# Build C++
-cmake ..
+cmake .. -G "Visual Studio 17 2022" -A x64
 cmake --build . --config Release
-
-# Build Go
-cd ..\go
-go mod download
-go build -o ..\bin\jobsearch_app .\cmd\jobsearch
-
-echo "Build complete!"
-echo "C++ engine: ..\bin\jobsearch_engine.exe"
-echo "Go app: ..\bin\jobsearch_app.exe"
+.\Release\job_matching_engine.exe --port 10000
 ```
 
-### build.sh (Linux/macOS Bash)
+### Linux/macOS
 
 ```bash
-#!/bin/bash
-set -e
-
-echo "Building JobSearchEngine..."
-
-# Build C++
+cd JobSearchEngine
 mkdir -p build
 cd build
 cmake ..
 make
-cd ..
+./job_matching_engine --port 10000
+```
 
-# Build Go
-cd go
+### Install nlohmann/json
+
+```bash
+mkdir -p cpp/include/nlohmann
+curl -L https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp \
+  -o cpp/include/nlohmann/json.hpp
+```
+
+---
+
+## Building Go Orchestrator
+
+```bash
+cd JobSearchEngine/go
 go mod download
-go build -o ../bin/jobsearch_app ./cmd/jobsearch
-cd ..
-
-echo "Build complete!"
-echo "C++ engine: bin/jobsearch_engine"
-echo "Go app: bin/jobsearch_app"
+go build -o jobsearch ./cmd/jobsearch
+./jobsearch -config ../config/orchestrator.json
 ```
 
-## Running the Application
+---
 
-### Basic Usage
+## Running Both Services
+
+### Terminal 1 - C++ Server
+```bash
+./build/job_matching_engine --port 10000
+```
+
+### Terminal 2 - Go Orchestrator
+```bash
+./go/jobsearch -config config/orchestrator.json
+```
+
+---
+
+## Configuration
+
+Edit `config/orchestrator.json`:
+
+```json
+{
+  "server": {
+    "address": "localhost",
+    "port": 10000
+  },
+  "candidate": {
+    "name": "Your Name",
+    "resume_id": "resume_001",
+    "keywords": ["C++", "Python", "AWS", ...]
+  },
+  "schedule": {
+    "fetch_interval": "30s",
+    "health_check_interval": "10s",
+    "tcp_timeout": "10s"
+  },
+  "logging": {
+    "directory": "logs"
+  },
+  "platforms": [
+    {"name": "linkedin", "enabled": true},
+    {"name": "naukri", "enabled": true}
+  ]
+}
+```
+
+---
+
+## Verification
 
 ```bash
-./bin/jobsearch_app --candidate "John Doe" --config config/config.yaml
+# Test C++ server is listening
+nc -zv localhost 10000
+
+# Check logs for matches
+tail -f logs/$(date +%Y-%m-%d).log
 ```
 
-### On Windows
-
-```powershell
-.\bin\jobsearch_app.exe --candidate "John Doe" --config config\config.yaml
-```
-
-### With Custom Config
-
-```bash
-./bin/jobsearch_app --candidate "Jane Smith" --config ./custom_config.yaml
-```
-
-## Verify Installation
-
-### Test C++ Engine
-
-```bash
-# Linux/macOS
-echo '{"command":"parse_resume","content":"10 years C++ experience","candidate_name":"Test"}' | \
-./bin/jobsearch_engine
-
-# Windows (PowerShell)
-'{"command":"parse_resume","content":"10 years C++ experience","candidate_name":"Test"}' | \
-.\bin\jobsearch_engine.exe
-```
-
-### Test Go App
-
-```bash
-# Check help
-./bin/jobsearch_app --help
-
-# Run with john_doe resume
-./bin/jobsearch_app --candidate "John Doe"
-```
-
-## Directory Structure After Build
-
-```
-JobSearchEngine/
-├── bin/
-│   ├── jobsearch_engine       # C++ executable
-│   └── jobsearch_app          # Go executable
-├── build/                     # CMake build directory
-│   ├── CMakeFiles/
-│   ├── CMakeCache.txt
-│   └── Makefile (or .sln on Windows)
-├── cpp/
-├── go/
-│   ├── go.sum
-│   └── go.mod
-└── config/
-    └── config.yaml
-```
+---
 
 ## Troubleshooting
 
-### C++ Build Issues
-
-**Error: "cmake not found"**
-- Install CMake: https://cmake.org/download/
-- Add to PATH
-
-**Error: "C++ compiler not found"**
-- Windows: Install Visual Studio
-- Linux: `sudo apt-get install build-essential`
-- macOS: `xcode-select --install`
-
-### Go Build Issues
-
-**Error: "go: not found"**
-- Install Go 1.21+: https://golang.org/dl/
-- Add to PATH
-
-**Error: "module not found"**
+**Port already in use:**
 ```bash
-cd JobSearchEngine/go
-go mod tidy
-go mod download
+# Linux/macOS: Kill process
+lsof -i :10000 | grep LISTEN | awk '{print $2}' | xargs kill -9
+
+# Windows
+netstat -ano | findstr :10000
+taskkill /PID <PID> /F
 ```
 
-### Runtime Issues
-
-**Error: "Resume not found"**
-- Ensure resume exists in `resumes/john_doe.txt` (matches candidate name)
-- Check config paths: `config.yaml`
-
-**Error: "C++ engine not found"**
-- Ensure C++ binary is compiled and in `bin/` directory
-- Check `cpp_engine_path` in `config.yaml`
-
-**Error: "Port already in use"**
-- The application doesn't use network ports - check for file lock issues
-- Restart the application
-
-## Continuous Integration
-
-### GitHub Actions Example
-
-Create `.github/workflows/build.yml`:
-
-```yaml
-name: Build
-
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-      - name: Install CMake
-        run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get install -y cmake
-          else
-            brew install cmake
-          fi
-        shell: bash
-      - name: Build
-        run: |
-          mkdir build && cd build
-          cmake .. && make
-          cd ../go && go build -o ../bin/jobsearch_app ./cmd/jobsearch
-        shell: bash
-      - name: Test
-        run: |
-          go test ./...
-```
-
-## Performance Notes
-
-- **First run:** May take 10-30 seconds (C++ engine initialization, resume parsing)
-- **Subsequent runs:** 2-5 seconds per search cycle
-- **Memory usage:** ~50-100 MB
-- **Disk usage:** Logs grow ~10 KB per 100 matched jobs
-
-## Deployment
-
-### Docker Deployment
-
-```dockerfile
-FROM golang:1.21-alpine AS builder
-
-WORKDIR /app
-COPY . .
-
-RUN apk add --no-cache cmake build-base
-RUN cd go && go build -o /app/bin/jobsearch_app ./cmd/jobsearch
-RUN mkdir -p build && cd build && cmake .. && make
-
-FROM alpine:latest
-WORKDIR /app
-COPY --from=builder /app/bin /app/bin
-COPY --from=builder /app/config /app/config
-COPY --from=builder /app/resumes /app/resumes
-
-ENTRYPOINT ["/app/bin/jobsearch_app"]
-```
-
-Build and run:
+**nlohmann/json not found:**
 ```bash
-docker build -t jobsearch:latest .
-docker run --name jobsearch jobsearch:latest --candidate "John Doe"
+# Ensure file exists at cpp/include/nlohmann/json.hpp
+ls -la cpp/include/nlohmann/json.hpp
 ```
+
+**Go connection refused:**
+```bash
+# Ensure C++ server is running
+ps aux | grep job_matching_engine
+```
+
+---

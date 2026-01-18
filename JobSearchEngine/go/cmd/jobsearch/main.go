@@ -1,115 +1,149 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
 	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
+	"os/signal"
+	"syscall"
+	"time"
 
-	"jobsearch/pkg/config"
-	"jobsearch/pkg/ipc"
-	"jobsearch/pkg/logging"
-	"jobsearch/pkg/scheduler"
-	"jobsearch/pkg/search"
+	"jobsearch/pkg/orchestrator"
 )
 
+// ===== CONFIGURATION STRUCTURE =====
+
+// Config - What we read from the JSON configuration file
+// This defines all the settings needed to run the job search
+type Config struct {
+	Server struct {
+		Address string `json:"address"` // Server IP (e.g., "localhost")
+		Port    int    `json:"port"`    // Server port (e.g., 10000)
+	} `json:"server"`
+	Candidate struct {
+		Name     string   `json:"name"`      // Your name
+		ResumeID string   `json:"resume_id"` // Where to find your resume
+		Keywords []string `json:"keywords"`  // Your skills
+	} `json:"candidate"`
+	Schedule struct {
+		FetchInterval       string `json:"fetch_interval"`        // How often to search for jobs (e.g., "1h")
+		HealthCheckInterval string `json:"health_check_interval"` // How often to check server (e.g., "5m")
+		TCPTimeout          string `json:"tcp_timeout"`           // How long to wait for TCP responses (e.g., "30s")
+	} `json:"schedule"`
+	Logging struct {
+		Directory string `json:"directory"` // Where to save log files
+	} `json:"logging"`
+	Platforms []struct {
+		Name    string `json:"name"`    // Platform name (e.g., "linkedin")
+		Enabled bool   `json:"enabled"` // Should we search this platform?
+	} `json:"platforms"`
+}
+
+// ===== MAIN ENTRY POINT =====
+
+// main - The starting point of the program
+// Reads configuration, sets up the orchestrator, and starts the job search
 func main() {
-	// Parse command-line flags
-	candidateName := flag.String("candidate", "", "Candidate name (required)")
-	configPath := flag.String("config", "config/config.yaml", "Path to configuration file")
+	// Parse command-line arguments
+	configFile := flag.String("config", "config/orchestrator.json", "Configuration file path")
 	flag.Parse()
 
-	if *candidateName == "" {
-		fmt.Fprintf(os.Stderr, "Error: --candidate flag is required\n")
-		fmt.Fprintf(os.Stderr, "Usage: jobsearch --candidate \"John Doe\" [--config config.yaml]\n")
-		os.Exit(1)
-	}
-
-	// Load configuration
-	cfg, err := config.LoadConfig(*configPath)
+	// Step 1: Load configuration from JSON file
+	config, err := loadConfig(*configFile)
 	if err != nil {
-		log.Fatalf("Failed to load configuration: %v", err)
-	}
-
-	// Initialize logger
-	logger := logging.NewDailyLogger(cfg.Paths.Logs)
-	defer logger.Close()
-
-	logger.Infof("JobSearchEngine started for candidate: %s", *candidateName)
-	logger.Infof("Configuration loaded from: %s", *configPath)
-	logger.Infof("Platform: %s/%s", runtime.GOOS, runtime.GOARCH)
-
-	// Validate resume exists
-	resumePath := filepath.Join(cfg.Paths.Resumes, sanitizeFilename(*candidateName)+".txt")
-	if _, err := os.Stat(resumePath); os.IsNotExist(err) {
-		logger.Errorf("Resume not found for candidate: %s (expected at %s)", *candidateName, resumePath)
-		fmt.Fprintf(os.Stderr, "Error: Resume not found for candidate: %s\n", *candidateName)
+		fmt.Fprintf(os.Stderr, "Failed to load configuration: %v\n", err)
 		os.Exit(1)
 	}
 
-	// Read resume content
-	resumeContent, err := os.ReadFile(resumePath)
+	// Step 2: Parse time durations from config
+	// These are strings like "1h", "5m", "30s" that need to be converted to Go duration objects
+	fetchInterval, err := time.ParseDuration(config.Schedule.FetchInterval)
 	if err != nil {
-		logger.Errorf("Failed to read resume: %v", err)
-		fmt.Fprintf(os.Stderr, "Error: Failed to read resume: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Invalid fetch interval: %v\n", err)
 		os.Exit(1)
 	}
 
-	// Parse resume using C++ engine
-	logger.Infof("Parsing resume for candidate: %s", *candidateName)
-	ipcClient := ipc.NewIPCClient(cfg.System.CPPEnginePath)
-
-	parsedResume, err := ipcClient.ParseResume(string(resumeContent), *candidateName)
+	healthCheckInterval, err := time.ParseDuration(config.Schedule.HealthCheckInterval)
 	if err != nil {
-		logger.Errorf("Failed to parse resume: %v", err)
-		fmt.Fprintf(os.Stderr, "Error: Failed to parse resume: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Invalid health check interval: %v\n", err)
 		os.Exit(1)
 	}
 
-	logger.Infof("Resume parsed successfully. Skills: %v, Experience: %d years, Roles: %v",
-		parsedResume.Skills, parsedResume.ExperienceYears, parsedResume.Roles)
-
-	// Prevent system sleep (platform-specific)
-	if cfg.System.PreventSleepOnWindows && runtime.GOOS == "windows" {
-		preventSleep()
-		defer allowSleep()
-		logger.Info("System sleep prevention enabled on Windows")
+	tcpTimeout, err := time.ParseDuration(config.Schedule.TCPTimeout)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Invalid TCP timeout: %v\n", err)
+		os.Exit(1)
 	}
 
-	// Initialize job search engine
-	searchEngine := search.NewSearchEngine(cfg.JobPortals)
+	// Step 3: Convert platform configs from JSON format to internal format
+	var platforms []orchestrator.PlatformConfig
+	for _, p := range config.Platforms {
+		platforms = append(platforms, orchestrator.PlatformConfig{
+			Name:    p.Name,
+			Enabled: p.Enabled,
+		})
+	}
 
-	// Initialize scheduler
-	sched := scheduler.NewScheduler(*candidateName, parsedResume, cfg, logger, ipcClient, searchEngine)
+	// Step 4: Build the orchestrator configuration
+	orchConfig := &orchestrator.Config{
+		ServerAddress:       fmt.Sprintf("%s:%d", config.Server.Address, config.Server.Port),
+		CandidateName:       config.Candidate.Name,
+		ResumeID:            config.Candidate.ResumeID,
+		ResumeKeywords:      config.Candidate.Keywords,
+		FetchInterval:       fetchInterval,
+		HealthCheckInterval: healthCheckInterval,
+		TCPTimeout:          tcpTimeout,
+		LogDir:              config.Logging.Directory,
+		Platforms:           platforms,
+	}
 
-	// Run scheduler (blocking call)
-	logger.Info("Starting job search scheduler")
-	sched.Start()
+	// Step 5: Create the orchestrator
+	orch, err := orchestrator.NewOrchestrator(orchConfig)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to create orchestrator: %v\n", err)
+		os.Exit(1)
+	}
 
-	logger.Info("JobSearchEngine shutdown complete")
-}
+	// Step 6: Handle Ctrl+C gracefully
+	// When user presses Ctrl+C, we want to stop cleanly instead of crashing
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
 
-// sanitizeFilename converts candidate name to safe filename
-func sanitizeFilename(name string) string {
-	return strings.NewReplacer(" ", "_", "/", "_", "\\", "_", ":", "_").Replace(name)
-}
+	// This goroutine waits for Ctrl+C and tells orchestrator to stop
+	go func() {
+		<-sigChan
+		orch.Stop()
+	}()
 
-// preventSleep prevents system sleep on Windows
-func preventSleep() {
-	if runtime.GOOS == "windows" {
-		// On Windows, use SetThreadExecutionState to prevent sleep
-		// This requires cgo or syscall package
-		// Simplified implementation - actual implementation would use Windows API
-		log.Println("Preventing system sleep on Windows")
+	// Step 7: Start the orchestrator
+	// This runs the main job search loop
+	if err := orch.Start(); err != nil {
+		fmt.Fprintf(os.Stderr, "Orchestrator error: %v\n", err)
+		os.Exit(1)
 	}
 }
 
-// allowSleep allows system to sleep again
-func allowSleep() {
-	if runtime.GOOS == "windows" {
-		log.Println("Allowing system sleep on Windows")
+// ===== HELPER FUNCTIONS =====
+
+// loadConfig - Reads and parses the JSON configuration file
+// Parameters:
+//
+//	filename - Path to the config file (e.g., "config/orchestrator.json")
+//
+// Returns: Parsed configuration, or error if file can't be read/parsed
+func loadConfig(filename string) (*Config, error) {
+	// Read the entire file
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}
+
+	// Parse the JSON
+	var config Config
+	if err := json.Unmarshal(data, &config); err != nil {
+		return nil, fmt.Errorf("failed to parse config: %w", err)
+	}
+
+	return &config, nil
 }

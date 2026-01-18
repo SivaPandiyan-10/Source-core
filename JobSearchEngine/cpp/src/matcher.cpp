@@ -1,14 +1,12 @@
-#include "../include/matcher.h"
+#include "matcher.h"
 #include <algorithm>
 #include <cctype>
-#include <cmath>
 #include <sstream>
 
-namespace jobsearch {
+namespace jse {
+namespace matching {
 
-JobMatcher::JobMatcher(const MatchingConfig& config) : config_(config) {}
-
-JobMatcher::~JobMatcher() = default;
+JobMatcher::JobMatcher() : match_threshold_(0.70) {}
 
 std::vector<MatchResult> JobMatcher::match_jobs(
     const Resume& resume,

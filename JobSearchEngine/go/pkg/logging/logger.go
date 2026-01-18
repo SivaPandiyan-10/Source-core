@@ -4,250 +4,190 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
 
-// JobMatch represents a matched job entry for logging
-type JobMatch struct {
-	Company          string
-	Role             string
-	ApplyLink        string
-	Source           string
-	ConfidenceScore  float64
-	Timestamp        time.Time
-	ExperienceMatch  float64
-	SkillMatch       float64
-	RoleMatch        float64
-	LocationMatch    float64
+// ===== DATA STRUCTURES =====
+
+// LogEntry - Information about a single matched job
+// This data gets written to the daily log file
+type LogEntry struct {
+	Timestamp       time.Time  // When the match was found
+	CandidateName   string     // Who we're matching for
+	CompanyName     string     // Which company posted the job
+	JobTitle        string     // The position title
+	ApplyLink       string     // URL to apply
+	JobPlatform     string     // Where we found it (e.g., LinkedIn, Naukri)
+	ConfidenceScore float64    // Match percentage (0.0 to 1.0)
+	MatchedSkills   []string   // Which skills matched
 }
 
-// Logger interface for logging operations
-type Logger interface {
-	Info(msg string)
-	Infof(format string, args ...interface{})
-	Warn(msg string)
-	Warnf(format string, args ...interface{})
-	Error(msg string)
-	Errorf(format string, args ...interface{})
-	Debugf(format string, args ...interface{})
-	LogJobMatch(match *JobMatch) error
-	Close() error
+// ===== LOGGER =====
+
+// Logger - Handles writing job matches to daily log files
+// Each day gets its own log file (YYYY-MM-DD.log format)
+// Uses Mutex to make sure multiple goroutines can log at the same time safely
+type Logger struct {
+	logDir     string        // Directory where logs are stored
+	currentDay string        // Which day's file is currently open (YYYY-MM-DD)
+	file       *os.File      // The currently open log file
+	mu         sync.Mutex    // Prevents multiple goroutines from writing simultaneously
 }
 
-// DailyLogger creates daily log files and rotates them
-type DailyLogger struct {
-	logDir        string
-	currentDate   string
-	file          *os.File
-	mu            sync.Mutex
-	deduplicator  *Deduplicator
-}
+// ===== CONSTRUCTOR =====
 
-// Deduplicator prevents duplicate job entries
-type Deduplicator struct {
-	seen map[string]bool
-	mu   sync.Mutex
-}
-
-// NewDailyLogger creates a new daily logger
-func NewDailyLogger(logDir string) *DailyLogger {
-	// Create log directory if it doesn't exist
+// NewLogger - Creates a new logger
+// Parameters:
+//   logDir - Directory where daily log files will be stored
+// Returns: A new Logger, or error if directory can't be created
+func NewLogger(logDir string) (*Logger, error) {
+	// Create the log directory if it doesn't exist
 	if err := os.MkdirAll(logDir, 0755); err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to create log directory: %v\n", err)
+		return nil, fmt.Errorf("failed to create log directory: %w", err)
 	}
 
-	return &DailyLogger{
-		logDir:       logDir,
-		deduplicator: NewDeduplicator(),
-	}
+	return &Logger{
+		logDir: logDir,
+	}, nil
 }
 
-// NewDeduplicator creates a new deduplicator
-func NewDeduplicator() *Deduplicator {
-	return &Deduplicator{
-		seen: make(map[string]bool),
-	}
-}
+// ===== LOGGING OPERATIONS =====
 
-// isDuplicate checks if a job has already been logged
-func (d *Deduplicator) isDuplicate(company, role, link string) bool {
-	d.mu.Lock()
-	defer d.mu.Unlock()
-
-	key := fmt.Sprintf("%s|%s|%s", company, role, link)
-	if d.seen[key] {
-		return true
-	}
-
-	d.seen[key] = true
-	return false
-}
-
-// ensureFileOpen ensures the log file is open for the current date
-func (l *DailyLogger) ensureFileOpen() error {
+// LogMatch - Writes a job match to the daily log file
+// Automatically creates a new file if the date changes
+// Parameters:
+//   entry - The job match information to log
+// Returns: Error if writing fails
+func (l *Logger) LogMatch(entry LogEntry) error {
+	// Lock the mutex to prevent other goroutines from writing at the same time
+	// This ensures our log file doesn't get corrupted
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
-	today := time.Now().Format("2006-01-02")
+	// Format the date (YYYY-MM-DD)
+	currentDay := entry.Timestamp.Format("2006-01-02")
+	
+	// If the date changed, close the old file and open a new one
+	if currentDay != l.currentDay {
+		// Close the old file if it's open
+		if l.file != nil {
+			l.file.Close()
+		}
 
-	// If file is already open for today, return
-	if l.file != nil && l.currentDate == today {
-		return nil
+		// Build the filename: logs/2024-01-15.log
+		filename := filepath.Join(l.logDir, currentDay+".log")
+		
+		// Open the file for writing (create if doesn't exist, append if it does)
+		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+		if err != nil {
+			return fmt.Errorf("failed to open log file: %w", err)
+		}
+
+		l.file = file
+		l.currentDay = currentDay
+
+		// Write a header if the file is brand new (empty)
+		stat, _ := os.Stat(filename)
+		if stat.Size() == 0 {
+			fmt.Fprintf(l.file, "=== JobSearchEngine - Daily Match Log ===\n")
+			fmt.Fprintf(l.file, "Date: %s\n", currentDay)
+			fmt.Fprintf(l.file, "=============================================\n\n")
+		}
 	}
 
-	// Close previous file if open
-	if l.file != nil {
-		l.file.Close()
-	}
+	// Format the timestamp
+	timestamp := entry.Timestamp.Format("2006-01-02 15:04:05")
+	
+	// Convert the list of skills to a string (e.g., "Go, Python, Docker")
+	skillsStr := strings.Join(entry.MatchedSkills, ", ")
 
-	// Open or create today's log file
-	logPath := filepath.Join(l.logDir, today+".log")
-	file, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return fmt.Errorf("failed to open log file: %w", err)
-	}
-
-	l.file = file
-	l.currentDate = today
-
-	return nil
-}
-
-// Info logs an info message
-func (l *DailyLogger) Info(msg string) {
-	l.Infof("%s", msg)
-}
-
-// Infof logs a formatted info message
-func (l *DailyLogger) Infof(format string, args ...interface{}) {
-	l.ensureFileOpen()
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	msg := fmt.Sprintf("[%s] [INFO] %s\n", timestamp, fmt.Sprintf(format, args...))
-
-	l.mu.Lock()
-	if l.file != nil {
-		l.file.WriteString(msg)
-	}
-	l.mu.Unlock()
-
-	// Also print to stdout
-	fmt.Print(msg)
-}
-
-// Warn logs a warning message
-func (l *DailyLogger) Warn(msg string) {
-	l.Warnf("%s", msg)
-}
-
-// Warnf logs a formatted warning message
-func (l *DailyLogger) Warnf(format string, args ...interface{}) {
-	l.ensureFileOpen()
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	msg := fmt.Sprintf("[%s] [WARN] %s\n", timestamp, fmt.Sprintf(format, args...))
-
-	l.mu.Lock()
-	if l.file != nil {
-		l.file.WriteString(msg)
-	}
-	l.mu.Unlock()
-
-	// Also print to stderr
-	fmt.Fprint(os.Stderr, msg)
-}
-
-// Error logs an error message
-func (l *DailyLogger) Error(msg string) {
-	l.Errorf("%s", msg)
-}
-
-// Errorf logs a formatted error message
-func (l *DailyLogger) Errorf(format string, args ...interface{}) {
-	l.ensureFileOpen()
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	msg := fmt.Sprintf("[%s] [ERROR] %s\n", timestamp, fmt.Sprintf(format, args...))
-
-	l.mu.Lock()
-	if l.file != nil {
-		l.file.WriteString(msg)
-	}
-	l.mu.Unlock()
-
-	// Also print to stderr
-	fmt.Fprint(os.Stderr, msg)
-}
-
-// Debugf logs a formatted debug message
-func (l *DailyLogger) Debugf(format string, args ...interface{}) {
-	l.ensureFileOpen()
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	msg := fmt.Sprintf("[%s] [DEBUG] %s\n", timestamp, fmt.Sprintf(format, args...))
-
-	l.mu.Lock()
-	if l.file != nil {
-		l.file.WriteString(msg)
-	}
-	l.mu.Unlock()
-
-	// Also print to stdout
-	fmt.Print(msg)
-}
-
-// LogJobMatch logs a matched job with deduplication
-func (l *DailyLogger) LogJobMatch(match *JobMatch) error {
-	// Check for duplicates
-	if l.deduplicator.isDuplicate(match.Company, match.Role, match.ApplyLink) {
-		l.Infof("Skipping duplicate job: %s - %s", match.Company, match.Role)
-		return nil
-	}
-
-	l.ensureFileOpen()
-
-	timestamp := match.Timestamp.Format("2006-01-02 15:04:05")
-	scoreStr := fmt.Sprintf("%.2f", match.ConfidenceScore)
-
-	// Format: [timestamp] Company | Role | Link | Source | Score | Breakdown
-	entry := fmt.Sprintf(
-		"[%s] %s | %s | %s | %s | %s | Skill:%.2f Exp:%.2f Role:%.2f Loc:%.2f\n",
+	// Build the log line with all the information
+	logLine := fmt.Sprintf(
+		"[%s] Candidate: %s | Company: %s | Job: %s | Platform: %s | Score: %.2f%% | Skills: [%s] | Apply: %s\n",
 		timestamp,
-		match.Company,
-		match.Role,
-		match.ApplyLink,
-		match.Source,
-		scoreStr,
-		match.SkillMatch,
-		match.ExperienceMatch,
-		match.RoleMatch,
-		match.LocationMatch,
+		entry.CandidateName,
+		entry.CompanyName,
+		entry.JobTitle,
+		entry.JobPlatform,
+		entry.ConfidenceScore*100,  // Convert 0.85 to 85%
+		skillsStr,
+		entry.ApplyLink,
 	)
 
-	l.mu.Lock()
-	if l.file != nil {
-		_, err := l.file.WriteString(entry)
-		l.mu.Unlock()
-		if err != nil {
-			return fmt.Errorf("failed to write log entry: %w", err)
-		}
-	} else {
-		l.mu.Unlock()
-		return fmt.Errorf("log file is not open")
+	// Write the line to the file
+	if _, err := l.file.WriteString(logLine); err != nil {
+		return fmt.Errorf("failed to write log entry: %w", err)
 	}
 
-	// Also print to stdout
-	fmt.Print(entry)
-
-	return nil
+	// Make sure it's written to disk (not just buffered)
+	return l.file.Sync()
 }
 
-// Close closes the logger and flushes pending writes
-func (l *DailyLogger) Close() error {
+// Close - Closes the logger and finishes all pending writes
+// Always call this when done to cleanup
+// Returns: Error if closing fails
+func (l *Logger) Close() error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
 	if l.file != nil {
-		l.file.Sync()
 		return l.file.Close()
 	}
-
 	return nil
+}
+
+// ===== STATISTICS =====
+
+// GetMatchCount - Counts how many matches we logged today
+// Returns: The number of log entries for today (or 0 if no file yet)
+func (l *Logger) GetMatchCount() (int, error) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	// Get today's date
+	currentDay := time.Now().Format("2006-01-02")
+	filename := filepath.Join(l.logDir, currentDay+".log")
+
+	// Read the entire log file
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		// If the file doesn't exist, we have 0 matches
+		if os.IsNotExist(err) {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	// Count how many lines contain job matches
+	// (header lines start with "===", dates start with "Date:", or are empty)
+	logContent := string(content)
+	matches := 0
+	
+	for _, line := range strings.Split(logContent, "\n") {
+		// Skip empty lines and header lines
+		if len(line) == 0 || strings.HasPrefix(line, "=") || strings.HasPrefix(line, "Date:") {
+			continue
+		}
+		
+		// Any other line is a log entry, so count it
+		if len(line) > 0 {
+			matches++
+		}
+	}
+
+	return matches, nil
+}
+
+	// Count lines that are log entries (not headers)
+	lines := strings.Split(string(content), "\n")
+	count := 0
+	for _, line := range lines {
+		if strings.HasPrefix(line, "[") && strings.Contains(line, "] Candidate:") {
+			count++
+		}
+	}
+
+	return count, nil
 }
