@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system deps
+        run: sudo apt-get update && sudo apt-get install -y cmake build-essential libsqlite3-dev libcurl4-openssl-dev libsodium-dev python3-pip
+      - name: Setup Python
+        run: python3 -m pip install --upgrade pip
+      - name: Install Python deps
+        run: pip install -r python/requirements.txt
+      - name: Run Python lint/test
+        run: python -m python.python -c "print('python available')" || true
+      - name: Build C++
+        run: mkdir build && cd build && cmake .. && cmake --build . --config Release

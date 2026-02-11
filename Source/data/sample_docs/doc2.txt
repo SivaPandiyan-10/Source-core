@@ -1,0 +1,5 @@
+Interview prep notes:
+
+Practice STAR method for behavioral questions. Keep concise project stories: problem, action, result.
+
+Technical topics: modern C++ patterns, memory management, concurrency, RAG systems.

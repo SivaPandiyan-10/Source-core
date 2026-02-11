@@ -1,0 +1,22 @@
+@startuml
+title Personal AI Assistant - Class Diagram (simplified)
+
+class CoreEngine {
+}
+class LLMInterface
+class StubLLM
+class EmbeddingService
+class MemoryManager
+class FinancialModule
+class KnowledgeStore
+
+CoreEngine --> LLMInterface
+CoreEngine --> EmbeddingService
+CoreEngine --> MemoryManager
+CoreEngine --> FinancialModule
+KnowledgeStore --> MemoryManager
+
+LLMInterface <|-- StubLLM
+EmbeddingService <|-- (python microservice)
+
+@enduml

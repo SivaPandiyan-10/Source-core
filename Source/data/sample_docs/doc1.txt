@@ -1,0 +1,8 @@
+Personal AI Assistant project plan.
+
+This document describes the project architecture, including a C++ core, Python embedding microservice, and a simple RAG pipeline. It is intended as a short sample document to index and search.
+
+Features:
+- Salary tracking
+- Expense management
+- Knowledge storage and retrieval

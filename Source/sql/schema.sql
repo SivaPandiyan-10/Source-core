@@ -1,0 +1,46 @@
+-- SQLite schema for Personal AI Assistant
+
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS salaries (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id),
+  date TEXT NOT NULL,
+  amount REAL NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS expenses (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id),
+  date TEXT NOT NULL,
+  amount REAL NOT NULL,
+  category TEXT
+);
+
+CREATE TABLE IF NOT EXISTS investments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id),
+  date TEXT NOT NULL,
+  asset TEXT,
+  amount REAL
+);
+
+CREATE TABLE IF NOT EXISTS knowledge (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER REFERENCES users(id),
+  tag TEXT,
+  content TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS embeddings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  knowledge_id INTEGER REFERENCES knowledge(id),
+  vector BLOB,
+  metadata TEXT
+);
