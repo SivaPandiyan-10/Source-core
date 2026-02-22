@@ -1,6 +1,8 @@
 #include "EmbeddingHttpClient.h"
 #include <curl/curl.h>
 #include <iostream>
+#include <sstream>
+#include <string>
 static size_t write_cb(void *ptr, size_t size, size_t nmemb, void *userdata) {
     std::string *s = reinterpret_cast<std::string*>(userdata);
     s->append(reinterpret_cast<char*>(ptr), size * nmemb);

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PersonalAI Frontend Stub</title>
+  </head>
+  <body>
+    <h1>PersonalAI Frontend Stub</h1>
+    <section>
+      <h2>Chat</h2>
+      <input id="query" placeholder="Ask something" style="width:60%" />
+      <button onclick="send()">Send</button>
+      <pre id="reply"></pre>
+    </section>
+
+    <section>
+      <h2>Upload</h2>
+      <input id="file" type="file" multiple />
+      <button onclick="upload()">Upload</button>
+      <pre id="uploadResult"></pre>
+    </section>
+
+    <script src="app/chat.js"></script>
+  </body>
+</html>

@@ -29,6 +29,6 @@ std::string OllamaClient::generate(const std::string &prompt) {
     CURLcode rc = curl_easy_perform(c);
     curl_slist_free_all(headers);
     curl_easy_cleanup(c);
-    if (rc != CURLE_OK) return string("(ollama error)");
+    if (rc != CURLE_OK) return std::string("(ollama error)");
     return out;
 }

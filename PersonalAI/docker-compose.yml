@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  embed:
+    build:
+      context: ./PersonalAI/backend
+      dockerfile: Dockerfile.embed
+    container_name: personalai-embed
+    ports:
+      - "8100:8100"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./PersonalAI/backend
+      dockerfile: Dockerfile.backend
+    container_name: personalai-backend
+    depends_on:
+      - embed
+      - redis
+    ports:
+      - "8000:8000"
+    environment:
+      - EMBED_SERVICE_URL=http://embed:8100
+    restart: unless-stopped
+
+  # optional services for production; uncomment when configured
+  redis:
+    image: redis:7
+    container_name: personalai-redis
+    ports:
+      - "6379:6379"
+
+  worker:
+    build:
+      context: ./PersonalAI/backend
+      dockerfile: Dockerfile.backend
+    container_name: personalai-worker
+    depends_on:
+      - redis
+      - embed
+    command: ["python", "worker.py"]
+    restart: unless-stopped

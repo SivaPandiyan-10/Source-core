@@ -1,0 +1,109 @@
+openapi: 3.0.3
+info:
+  title: Personal AI Assistant API
+  version: '0.1.0'
+servers:
+  - url: http://localhost:8000
+paths:
+  /auth/login:
+    post:
+      summary: Login and receive JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: tokens
+  /auth/refresh:
+    post:
+      summary: Refresh tokens
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: new tokens
+  /api/chat/stream:
+    post:
+      summary: Start streaming chat (WebSocket or SSE recommended)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                session_id:
+                  type: string
+                model:
+                  type: string
+      responses:
+        '200':
+          description: stream
+  /api/upload:
+    post:
+      summary: Upload document(s)
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: upload accepted
+  /api/search:
+    post:
+      summary: Semantic search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                top_k:
+                  type: integer
+      responses:
+        '200':
+          description: results
+  /embed:
+    post:
+      summary: Embedding microservice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texts:
+                  type: array
+                  items:
+                    type: string
+                model:
+                  type: string
+      responses:
+        '200':
+          description: embeddings

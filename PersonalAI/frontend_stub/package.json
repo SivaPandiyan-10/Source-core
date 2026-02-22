@@ -1,0 +1,12 @@
+{
+  "name": "personalai-frontend-stub",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.4.0"
+  }
+}

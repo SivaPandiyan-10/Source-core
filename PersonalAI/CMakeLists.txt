@@ -15,6 +15,7 @@ add_executable(personal_ai
   src/DB.cpp
   src/FinancialModule.cpp
   src/VectorStore.cpp
+  src/EncryptionUtil.cpp
   src/KnowledgeStore.cpp
   src/EmbeddingHttpClient.cpp
   src/OllamaClient.cpp

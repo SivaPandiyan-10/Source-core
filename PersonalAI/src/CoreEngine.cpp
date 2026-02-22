@@ -5,8 +5,10 @@
 #include "EmbeddingHttpClient.h"
 #include "VectorStore.h"
 #include "KnowledgeStore.h"
+#include "OllamaClient.h"
 #include <iostream>
 #include <memory>
+#include <limits>
 
 struct CoreEngineImpl {
     CoreEngineImpl() {

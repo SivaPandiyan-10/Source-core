@@ -2,6 +2,7 @@
 #include <sqlite3.h>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 #include <cmath>
 
 struct VectorStore::Impl {

@@ -4,6 +4,7 @@
 #include <sqlite3.h>
 #include <sstream>
 #include <iostream>
+#include "EncryptionUtil.h"
 
 struct KnowledgeStore::Impl {
     EmbeddingService *embed = nullptr;

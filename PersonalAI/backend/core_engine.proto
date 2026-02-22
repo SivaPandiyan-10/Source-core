@@ -1,0 +1,48 @@
+syntax = "proto3";
+package core;
+
+service CoreEngine {
+  rpc CalculateFinancialModel(CalcRequest) returns (CalcResponse);
+  rpc EncryptBlob(EncryptRequest) returns (EncryptResponse);
+  rpc DecryptBlob(DecryptRequest) returns (DecryptResponse);
+  rpc StoreRecord(StoreRequest) returns (StoreResponse);
+}
+
+message CalcRequest {
+  string model_spec = 1;
+  string input_json = 2;
+}
+
+message CalcResponse {
+  string output_json = 1;
+  double compute_time = 2; // seconds
+}
+
+message EncryptRequest {
+  bytes plaintext = 1;
+  string key_id = 2;
+}
+
+message EncryptResponse {
+  bytes ciphertext = 1;
+  string key_id = 2;
+}
+
+message DecryptRequest {
+  bytes ciphertext = 1;
+  string key_id = 2;
+}
+
+message DecryptResponse {
+  bytes plaintext = 1;
+}
+
+message StoreRequest {
+  string table = 1;
+  string record_json = 2;
+}
+
+message StoreResponse {
+  bool ok = 1;
+  string id = 2;
+}
