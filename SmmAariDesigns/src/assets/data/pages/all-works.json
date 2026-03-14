@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Complete Design Catalog",
+    "description":  "Explore our full style range covering bridal, festive, and minimalist blouse embroidery.",
+    "seo":  {
+                "description":  "Explore our full style range covering bridal, festive, and minimalist blouse embroidery.",
+                "title":  "All Works | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Complete Design Catalog",
+                 "description":  "Browse a complete spectrum of motifs, materials, and finish intensity levels.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/all-works.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Explore Every Aari Collection"
+             },
+    "title":  "All Works",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

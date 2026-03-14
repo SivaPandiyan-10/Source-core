@@ -1,0 +1,12 @@
+﻿<app-page-template pageKey="gallery" />
+<app-section title="Design Gallery" subtitle="Curated pieces loaded dynamically from assets/data/gallery.json">
+  <div class="gallery-grid">
+    <app-card *ngFor="let item of galleryItems$ | async" class="gallery-grid__card">
+      <div class="gallery-grid__media">
+        <app-image-loader [src]="'assets/images/gallery/' + item.file" [alt]="item.title" />
+      </div>
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.category }}</p>
+    </app-card>
+  </div>
+</app-section>

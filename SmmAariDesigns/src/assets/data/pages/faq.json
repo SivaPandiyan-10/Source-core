@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Common Questions",
+    "description":  "Answers about delivery timelines, pricing estimates, and customization support.",
+    "seo":  {
+                "description":  "Answers about delivery timelines, pricing estimates, and customization support.",
+                "title":  "FAQ | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Common Questions",
+                 "description":  "Everything you need to know before placing an embroidery order.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/faq.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Frequently Asked Questions"
+             },
+    "title":  "FAQ",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

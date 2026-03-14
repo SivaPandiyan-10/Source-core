@@ -1,0 +1,28 @@
+﻿<footer class="footer">
+  <div class="footer__grid">
+    <section>
+      <h3>{{ (siteConfig$ | async)?.businessName }}</h3>
+      <p>{{ (siteConfig$ | async)?.tagline }}</p>
+      <p>{{ (siteConfig$ | async)?.address }}</p>
+    </section>
+
+    <section>
+      <h3>Quick Links</h3>
+      <a *ngFor="let item of footerLinks$ | async" [routerLink]="item.route" class="footer__link">{{ item.label }}</a>
+    </section>
+
+    <section>
+      <h3>Contact</h3>
+      <a class="footer__link" [href]="'tel:' + (siteConfig$ | async)?.phone">{{ (siteConfig$ | async)?.phone }}</a>
+      <a class="footer__link" [href]="'mailto:' + (siteConfig$ | async)?.email">{{ (siteConfig$ | async)?.email }}</a>
+    </section>
+
+    <section>
+      <h3>Social</h3>
+      <a *ngIf="(socialLinks$ | async)?.instagram" [href]="(socialLinks$ | async)?.instagram" class="footer__link" target="_blank" rel="noreferrer">Instagram</a>
+      <a *ngIf="(socialLinks$ | async)?.facebook" [href]="(socialLinks$ | async)?.facebook" class="footer__link" target="_blank" rel="noreferrer">Facebook</a>
+      <a *ngIf="(socialLinks$ | async)?.youtube" [href]="(socialLinks$ | async)?.youtube" class="footer__link" target="_blank" rel="noreferrer">YouTube</a>
+      <a *ngIf="(socialLinks$ | async)?.whatsapp" [href]="(socialLinks$ | async)?.whatsapp" class="footer__link" target="_blank" rel="noreferrer">WhatsApp</a>
+    </section>
+  </div>
+</footer>

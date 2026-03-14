@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Selected Designs",
+    "description":  "Review selected design requests and proceed with confirmation.",
+    "seo":  {
+                "description":  "Review selected design requests and proceed with confirmation.",
+                "title":  "Cart | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Selected Designs",
+                 "description":  "This placeholder page is ready for future checkout integration.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/cart.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Your Selections"
+             },
+    "title":  "Cart",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

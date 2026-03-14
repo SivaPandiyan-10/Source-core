@@ -1,0 +1,28 @@
+﻿<ng-container *ngIf="pageData$ | async as page">
+  <section class="hero" *ngIf="page.hero as hero">
+    <div class="hero__content">
+      <p class="hero__eyebrow">{{ page.title }}</p>
+      <h1 class="hero__title">{{ hero.title }}</h1>
+      <p class="hero__text">{{ hero.description }}</p>
+      <app-button *ngIf="hero.ctaLabel" [label]="hero.ctaLabel" [route]="hero.ctaRoute || '/contact'" />
+    </div>
+    <div class="hero__media">
+      <app-image-loader [src]="hero.image" [alt]="hero.title" />
+    </div>
+  </section>
+
+  <app-section [title]="page.subtitle" [subtitle]="page.description">
+    <div class="page-grid">
+      <app-card *ngFor="let section of page.sections" class="page-grid__item">
+        <h3>{{ section.heading }}</h3>
+        <p>{{ section.text }}</p>
+        <ul *ngIf="section.bullets?.length">
+          <li *ngFor="let bullet of section.bullets">{{ bullet }}</li>
+        </ul>
+        <div class="page-grid__image" *ngIf="section.image">
+          <app-image-loader [src]="section.image" [alt]="section.heading" />
+        </div>
+      </app-card>
+    </div>
+  </app-section>
+</ng-container>

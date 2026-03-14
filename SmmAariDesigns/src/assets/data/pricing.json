@@ -1,0 +1,17 @@
+﻿[
+    {
+        "price":  2500,
+        "description":  "Simple blouse motifs with lightweight detailing.",
+        "service":  "Basic Aari Work"
+    },
+    {
+        "price":  5200,
+        "description":  "Balanced embellishment for receptions and engagement events.",
+        "service":  "Medium Bridal Design"
+    },
+    {
+        "price":  8500,
+        "description":  "Heavy bridal embroidery with premium stone and thread finish.",
+        "service":  "Bridal Premium"
+    }
+]

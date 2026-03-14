@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Client Feedback",
+    "description":  "Stories from brides and returning clients who value finish quality and timely delivery.",
+    "seo":  {
+                "description":  "Stories from brides and returning clients who value finish quality and timely delivery.",
+                "title":  "Testimonials | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Client Feedback",
+                 "description":  "We prioritize communication, precision, and design originality in every order.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/testimonials.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "What Clients Say"
+             },
+    "title":  "Testimonials",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

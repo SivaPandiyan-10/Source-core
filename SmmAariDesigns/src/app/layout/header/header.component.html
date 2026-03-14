@@ -1,0 +1,17 @@
+﻿<header class="header">
+  <div class="header__wrap">
+    <a class="header__brand" routerLink="/home">{{ (siteConfig$ | async)?.businessName }}</a>
+    <button type="button" class="header__toggle" (click)="toggleMenu()" aria-label="Toggle navigation">Menu</button>
+    <nav class="header__nav" [ngClass]="{ 'header__nav--open': isMenuOpen() }">
+      <a
+        *ngFor="let item of menu$ | async"
+        [routerLink]="item.route"
+        routerLinkActive="header__link--active"
+        class="header__link"
+        (click)="closeMenu()"
+      >
+        {{ item.label }}
+      </a>
+    </nav>
+  </div>
+</header>

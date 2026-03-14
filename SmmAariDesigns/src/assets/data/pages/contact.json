@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Plan Your Design",
+    "description":  "Share your style idea and required date to begin your personalized embroidery process.",
+    "seo":  {
+                "description":  "Share your style idea and required date to begin your personalized embroidery process.",
+                "title":  "Contact | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Plan Your Design",
+                 "description":  "Use phone, WhatsApp, or the form below to start with your measurements and concepts.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/contact.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Reach Out to Smm Aari Designs"
+             },
+    "title":  "Contact",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

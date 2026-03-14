@@ -1,0 +1,39 @@
+﻿{
+  "title": "Heavy Bridal",
+  "subtitle": "Premium Rich Detailing",
+  "description": "For clients who prefer dense motifs, layered stonework, and ornate back-neck focal patterns.",
+  "hero": {
+    "title": "Heavy Bridal Signature Pieces",
+    "subtitle": "Premium Rich Detailing",
+    "description": "Complex layouts and rich embellishment for standout wedding occasions.",
+    "image": "assets/images/hero/heavy-bridal.svg",
+    "ctaLabel": "Book Consultation",
+    "ctaRoute": "/contact"
+  },
+  "sections": [
+    {
+      "heading": "Dense Embroidery Layout",
+      "text": "Heavy bridal work uses packed motifs, layered curves, and elaborate borders to create a regal visual impact.",
+      "image": "assets/images/services/service1.svg",
+      "bullets": [
+        "High-density hand embroidery",
+        "Layered neckline architecture",
+        "Extended sleeve ornamentation"
+      ]
+    },
+    {
+      "heading": "Stone and Zardosi Highlights",
+      "text": "We add premium highlight elements strategically so the blouse catches light without overpowering the saree drape.",
+      "image": "assets/images/services/service2.svg",
+      "bullets": [
+        "Focused stone placement",
+        "Zardosi accent integration",
+        "Reinforced stitch durability"
+      ]
+    }
+  ],
+  "seo": {
+    "title": "Heavy Bridal | Smm Aari Designs",
+    "description": "For clients who prefer dense motifs, layered stonework, and ornate back-neck focal patterns."
+  }
+}

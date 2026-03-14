@@ -1,0 +1,32 @@
+﻿[
+    {
+        "title":  "Bridal Back Neck",
+        "category":  "bridal",
+        "file":  "design1.svg"
+    },
+    {
+        "title":  "Silk Sleeve Border",
+        "category":  "silk",
+        "file":  "design2.svg"
+    },
+    {
+        "title":  "Stone Work Classic",
+        "category":  "premium",
+        "file":  "design3.svg"
+    },
+    {
+        "title":  "Temple Motif Pattern",
+        "category":  "traditional",
+        "file":  "design4.svg"
+    },
+    {
+        "title":  "Reception Floral",
+        "category":  "partywear",
+        "file":  "design5.svg"
+    },
+    {
+        "title":  "Simple Line Art",
+        "category":  "simple",
+        "file":  "design6.svg"
+    }
+]

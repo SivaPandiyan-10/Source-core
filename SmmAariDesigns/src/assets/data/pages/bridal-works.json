@@ -1,0 +1,39 @@
+﻿{
+  "title": "Bridal Works",
+  "subtitle": "Wedding-Ready Embroidery",
+  "description": "Curated bridal patterns with rich texture, hand detailing, and premium finishing.",
+  "hero": {
+    "title": "Bridal Work Collections",
+    "subtitle": "Wedding-Ready Embroidery",
+    "description": "Designed for ceremony, muhurtham, and reception outfits with statement craftsmanship.",
+    "image": "assets/images/hero/bridal-works.svg",
+    "ctaLabel": "Book Consultation",
+    "ctaRoute": "/contact"
+  },
+  "sections": [
+    {
+      "heading": "Ceremony Pattern Curation",
+      "text": "We plan blouse motifs specifically for muhurtham and wedding rituals, balancing richness with graceful neckline flow.",
+      "image": "assets/images/services/service1.svg",
+      "bullets": [
+        "Traditional motif mapping",
+        "Neck and sleeve harmony",
+        "Color matching to saree tones"
+      ]
+    },
+    {
+      "heading": "Reception Finish Styling",
+      "text": "Reception-focused patterns emphasize statement backs, elegant sleeves, and polished stone accents for evening wear.",
+      "image": "assets/images/services/service2.svg",
+      "bullets": [
+        "Grand back-neck detailing",
+        "Balanced shimmer highlights",
+        "Premium finishing checks"
+      ]
+    }
+  ],
+  "seo": {
+    "title": "Bridal Works | Smm Aari Designs",
+    "description": "Curated bridal patterns with rich texture, hand detailing, and premium finishing."
+  }
+}

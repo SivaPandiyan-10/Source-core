@@ -1,0 +1,39 @@
+﻿{
+  "title": "Medium Works",
+  "subtitle": "Balanced Embroidery",
+  "description": "A practical blend of elegance and comfort with medium design density and graceful motifs.",
+  "hero": {
+    "title": "Medium Work Series",
+    "subtitle": "Balanced Embroidery",
+    "description": "Ideal for engagement, festive events, and versatile styling.",
+    "image": "assets/images/hero/medium-works.svg",
+    "ctaLabel": "Book Consultation",
+    "ctaRoute": "/contact"
+  },
+  "sections": [
+    {
+      "heading": "Event-Friendly Design Balance",
+      "text": "Medium designs keep detail visible in photos while staying lightweight enough for longer wear at functions.",
+      "image": "assets/images/services/service1.svg",
+      "bullets": [
+        "Moderate motif density",
+        "Comfort-first thread planning",
+        "Versatile festive styling"
+      ]
+    },
+    {
+      "heading": "Contemporary Motif Options",
+      "text": "This range supports floral, geometric, and fusion motifs for modern celebrations and pre-wedding events.",
+      "image": "assets/images/services/service2.svg",
+      "bullets": [
+        "Floral and geometric mixes",
+        "Refined border finishes",
+        "Fast-turnaround friendly"
+      ]
+    }
+  ],
+  "seo": {
+    "title": "Medium Works | Smm Aari Designs",
+    "description": "A practical blend of elegance and comfort with medium design density and graceful motifs."
+  }
+}

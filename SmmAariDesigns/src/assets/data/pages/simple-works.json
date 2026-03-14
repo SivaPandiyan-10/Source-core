@@ -1,0 +1,39 @@
+﻿{
+  "title": "Simple Works",
+  "subtitle": "Minimal and Elegant",
+  "description": "Clean lines and lightweight embroidery for everyday elegance and compact celebrations.",
+  "hero": {
+    "title": "Simple Work Edit",
+    "subtitle": "Minimal and Elegant",
+    "description": "Soft motifs with wearable comfort and polished hand finish.",
+    "image": "assets/images/hero/simple-works.svg",
+    "ctaLabel": "Book Consultation",
+    "ctaRoute": "/contact"
+  },
+  "sections": [
+    {
+      "heading": "Lightweight Daily Elegance",
+      "text": "Simple works focus on neat outlines and subtle motifs that pair well with office, pooja, and small events.",
+      "image": "assets/images/services/service1.svg",
+      "bullets": [
+        "Minimal motif approach",
+        "Clean neckline finishing",
+        "Comfort for all-day wear"
+      ]
+    },
+    {
+      "heading": "Budget-Friendly Customization",
+      "text": "You can personalize simple blouse designs with initials, borders, or sleeve accents while keeping costs controlled.",
+      "image": "assets/images/services/service2.svg",
+      "bullets": [
+        "Starter customization options",
+        "Quick design approval cycle",
+        "Affordable handcrafted finish"
+      ]
+    }
+  ],
+  "seo": {
+    "title": "Simple Works | Smm Aari Designs",
+    "description": "Clean lines and lightweight embroidery for everyday elegance and compact celebrations."
+  }
+}

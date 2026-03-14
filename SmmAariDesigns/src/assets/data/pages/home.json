@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Signature Aari Embroidery",
+    "description":  "Boutique studio for bridal and occasion-ready blouse artistry with handcrafted detail.",
+    "seo":  {
+                "description":  "Boutique studio for bridal and occasion-ready blouse artistry with handcrafted detail.",
+                "title":  "Home | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Signature Aari Embroidery",
+                 "description":  "Bring your blouse concepts to life with personalized design and finish quality.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/home.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Elegant Aari Craft for Modern Celebrations"
+             },
+    "title":  "Home",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

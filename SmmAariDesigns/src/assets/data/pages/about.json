@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Our Craft Story",
+    "description":  "Smm Aari Designs is focused on detail-driven handwork and transparent client communication.",
+    "seo":  {
+                "description":  "Smm Aari Designs is focused on detail-driven handwork and transparent client communication.",
+                "title":  "About | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Our Craft Story",
+                 "description":  "We deliver design-led embroidery rooted in consistency, quality, and fit-conscious execution.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/about.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Built on Craftsmanship and Trust"
+             },
+    "title":  "About",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

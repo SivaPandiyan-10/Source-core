@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Transparent Packages",
+    "description":  "Review starter, medium, and premium service ranges before you book.",
+    "seo":  {
+                "description":  "Review starter, medium, and premium service ranges before you book.",
+                "title":  "Pricing | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Transparent Packages",
+                 "description":  "Clear package-based pricing loaded from JSON for easy updates.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/pricing.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Pricing You Can Plan Around"
+             },
+    "title":  "Pricing",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

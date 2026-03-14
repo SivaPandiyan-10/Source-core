@@ -1,0 +1,42 @@
+﻿[
+    {
+        "label":  "Home",
+        "pageKey":  "home",
+        "route":  "/home"
+    },
+    {
+        "label":  "How It Works",
+        "pageKey":  "how-it-works",
+        "route":  "/how-it-works"
+    },
+    {
+        "label":  "All Works",
+        "pageKey":  "all-works",
+        "route":  "/all-works"
+    },
+    {
+        "label":  "Bridal Works",
+        "pageKey":  "bridal-works",
+        "route":  "/bridal-works"
+    },
+    {
+        "label":  "Heavy Bridal",
+        "pageKey":  "heavy-bridal",
+        "route":  "/heavy-bridal"
+    },
+    {
+        "label":  "Medium Works",
+        "pageKey":  "medium-works",
+        "route":  "/medium-works"
+    },
+    {
+        "label":  "Simple Works",
+        "pageKey":  "simple-works",
+        "route":  "/simple-works"
+    },
+    {
+        "label":  "Contact",
+        "pageKey":  "contact",
+        "route":  "/contact"
+    }
+]

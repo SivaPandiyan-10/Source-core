@@ -1,0 +1,98 @@
+﻿[
+    {
+        "label":  "Home",
+        "inMenu":  true,
+        "pageKey":  "home",
+        "route":  "/home"
+    },
+    {
+        "label":  "How It Works",
+        "inMenu":  true,
+        "pageKey":  "how-it-works",
+        "route":  "/how-it-works"
+    },
+    {
+        "label":  "All Works",
+        "inMenu":  true,
+        "pageKey":  "all-works",
+        "route":  "/all-works"
+    },
+    {
+        "label":  "Bridal Works",
+        "inMenu":  true,
+        "pageKey":  "bridal-works",
+        "route":  "/bridal-works"
+    },
+    {
+        "label":  "Heavy Bridal",
+        "inMenu":  true,
+        "pageKey":  "heavy-bridal",
+        "route":  "/heavy-bridal"
+    },
+    {
+        "label":  "Medium Works",
+        "inMenu":  true,
+        "pageKey":  "medium-works",
+        "route":  "/medium-works"
+    },
+    {
+        "label":  "Simple Works",
+        "inMenu":  true,
+        "pageKey":  "simple-works",
+        "route":  "/simple-works"
+    },
+    {
+        "label":  "About",
+        "inMenu":  false,
+        "pageKey":  "about",
+        "route":  "/about"
+    },
+    {
+        "label":  "Gallery",
+        "inMenu":  false,
+        "pageKey":  "gallery",
+        "route":  "/gallery"
+    },
+    {
+        "label":  "Services",
+        "inMenu":  false,
+        "pageKey":  "services",
+        "route":  "/services"
+    },
+    {
+        "label":  "Pricing",
+        "inMenu":  false,
+        "pageKey":  "pricing",
+        "route":  "/pricing"
+    },
+    {
+        "label":  "Testimonials",
+        "inMenu":  false,
+        "pageKey":  "testimonials",
+        "route":  "/testimonials"
+    },
+    {
+        "label":  "Contact",
+        "inMenu":  true,
+        "pageKey":  "contact",
+        "route":  "/contact"
+    },
+    {
+        "label":  "FAQ",
+        "inMenu":  false,
+        "pageKey":  "faq",
+        "route":  "/faq"
+    },
+    {
+        "label":  "Account",
+        "inMenu":  false,
+        "pageKey":  "account",
+        "route":  "/account"
+    },
+    {
+        "label":  "Cart",
+        "inMenu":  false,
+        "pageKey":  "cart",
+        "route":  "/cart"
+    }
+]

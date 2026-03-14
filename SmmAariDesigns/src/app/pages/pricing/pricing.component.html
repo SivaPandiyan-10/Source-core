@@ -1,0 +1,10 @@
+﻿<app-page-template pageKey="pricing" />
+<app-section title="Service Packages" subtitle="Pricing is loaded from assets/data/pricing.json">
+  <div class="pricing-grid">
+    <app-card *ngFor="let item of pricing$ | async" class="pricing-grid__card">
+      <h3>{{ item.service }}</h3>
+      <p class="pricing-grid__price">{{ item.price | currency: 'INR':'symbol':'1.0-0' }}</p>
+      <p>{{ item.description }}</p>
+    </app-card>
+  </div>
+</app-section>

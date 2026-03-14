@@ -1,0 +1,8 @@
+﻿<a *ngIf="route; else externalLink" [routerLink]="route" class="button" [class.button--ghost]="variant === 'ghost'">
+  {{ label }}
+</a>
+<ng-template #externalLink>
+  <a class="button" [class.button--ghost]="variant === 'ghost'" [href]="href || '#'" target="_blank" rel="noreferrer">
+    {{ label }}
+  </a>
+</ng-template>

@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Custom Design Services",
+    "description":  "Design consultation, motif planning, and complete blouse embroidery execution.",
+    "seo":  {
+                "description":  "Design consultation, motif planning, and complete blouse embroidery execution.",
+                "title":  "Services | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Custom Design Services",
+                 "description":  "From concept discussions to final stitch detailing, every stage is guided.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/services.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "Service Offerings"
+             },
+    "title":  "Services",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}

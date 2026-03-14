@@ -1,0 +1,39 @@
+﻿{
+    "subtitle":  "Simple Four-Step Flow",
+    "description":  "From consultation to delivery, our process keeps communication clear and timelines reliable.",
+    "seo":  {
+                "description":  "From consultation to delivery, our process keeps communication clear and timelines reliable.",
+                "title":  "How It Works | Smm Aari Designs"
+            },
+    "hero":  {
+                 "subtitle":  "Simple Four-Step Flow",
+                 "description":  "Share your concept, confirm design options, approve work progress, and receive final delivery.",
+                 "ctaRoute":  "/contact",
+                 "image":  "assets/images/hero/how-it-works.svg",
+                 "ctaLabel":  "Book Consultation",
+                 "title":  "How We Turn Ideas into Finished Blouses"
+             },
+    "title":  "How It Works",
+    "sections":  [
+                     {
+                         "bullets":  [
+                                         "One-on-one design discussion",
+                                         "Fabric and color suggestions",
+                                         "Timeline planning"
+                                     ],
+                         "heading":  "Design Consultation",
+                         "text":  "Discuss neck patterns, sleeve styles, thread shades, and stone detailing tailored to your event.",
+                         "image":  "assets/images/services/service1.svg"
+                     },
+                     {
+                         "bullets":  [
+                                         "Handcrafted embroidery",
+                                         "Detail-first quality review",
+                                         "Neat finishing and packing"
+                                     ],
+                         "heading":  "Craft Process",
+                         "text":  "Each blouse follows a measured layout, hand-embroidered execution, and finishing quality check before delivery.",
+                         "image":  "assets/images/services/service2.svg"
+                     }
+                 ]
+}
