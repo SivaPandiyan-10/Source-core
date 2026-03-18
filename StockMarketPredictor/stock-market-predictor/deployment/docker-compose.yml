@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: timescale/timescaledb:latest-pg14
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stockdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../deployment/Dockerfiles/backend.Dockerfile
+    container_name: backend
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/stockdb
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  ai-engine:
+    build:
+      context: ../ai-engine
+      dockerfile: ../deployment/Dockerfiles/ai-engine.Dockerfile
+    container_name: ai-engine
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/stockdb
+    volumes:
+      - ../ai-engine/model:/app/model
+
+  scheduler:
+    build:
+      context: ../scheduler
+      dockerfile: ../deployment/Dockerfiles/scheduler.Dockerfile
+    container_name: scheduler
+    depends_on:
+      - backend
+      - ai-engine
+      - redis
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/stockdb
+      REDIS_URL: redis://redis:6379/0
+
+  frontend:
+    build:
+      context: ../frontend/angular-dashboard
+      dockerfile: ../../deployment/Dockerfiles/frontend.Dockerfile
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  postgres_data:
+  redis_data:

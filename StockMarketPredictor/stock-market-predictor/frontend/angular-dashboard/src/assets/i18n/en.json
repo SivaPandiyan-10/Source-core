@@ -1,0 +1,17 @@
+{
+  "DASHBOARD": "Dashboard",
+  "ALL_STOCKS": "All Stocks",
+  "STOCK_DETAILS": "Stock Details",
+  "TOP_PREDICTED_STOCKS": "Top Predicted Stocks",
+  "SYMBOL": "Symbol",
+  "PROBABILITY_UP": "Probability Up",
+  "EXPECTED_RETURN": "Expected Return",
+  "CONFIDENCE": "Confidence",
+  "VOLUME": "Volume",
+  "NAME": "Name",
+  "SECTOR": "Sector",
+  "EXCHANGE": "Exchange",
+  "PREDICTION": "Prediction",
+  "PRICE_HISTORY": "Price History",
+  "TECHNICAL_INDICATORS": "Technical Indicators"
+}

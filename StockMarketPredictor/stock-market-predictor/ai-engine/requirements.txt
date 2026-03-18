@@ -1,0 +1,6 @@
+pandas
+xgboost
+scikit-learn
+joblib
+ta
+psycopg2-binary
